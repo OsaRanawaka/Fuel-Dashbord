@@ -103,7 +103,7 @@ h1{color:#fff!important;text-shadow:2px 2px 4px rgba(0,0,0,.8);text-align:center
 </style>
 """, unsafe_allow_html=True)
 
-# --- OPTION 2: THE GLOWING ENERGY CORE (100% Minified to prevent Markdown breaking) ---
+# --- THE GLOWING ENERGY CORE ---
 header_html = """<div style="display: flex; justify-content: center; align-items: center; margin-bottom: 30px;"><svg width="65" height="65" viewBox="0 0 100 100" style="margin-right: 20px; filter: drop-shadow(0px 0px 10px rgba(0, 245, 212, 0.7));"><defs><linearGradient id="coreFuel" x1="0%" y1="100%" x2="0%" y2="0%"><stop offset="0%" stop-color="#00f5d4" /><stop offset="100%" stop-color="#023e8a" /></linearGradient><linearGradient id="glassGlare" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#ffffff" stop-opacity="0.5"/><stop offset="50%" stop-color="#ffffff" stop-opacity="0"/><stop offset="100%" stop-color="#ffffff" stop-opacity="0.2"/></linearGradient></defs><path d="M 20 15 L 80 15 L 80 25 L 20 25 Z" fill="#1d3557" stroke="#48cae4" stroke-width="2"/><path d="M 20 75 L 80 75 L 80 85 L 20 85 Z" fill="#1d3557" stroke="#48cae4" stroke-width="2"/><rect x="25" y="25" width="50" height="50" fill="none" stroke="#e0e1dd" stroke-width="2" opacity="0.5"/><rect x="27" y="27" width="46" height="46" fill="url(#coreFuel)" opacity="0.8"><animate attributeName="height" values="5; 46; 5" dur="3s" repeatCount="indefinite" /><animate attributeName="y" values="68; 27; 68" dur="3s" repeatCount="indefinite" /></rect><rect x="25" y="25" width="50" height="50" fill="url(#glassGlare)"/><circle cx="40" cy="70" r="2" fill="#ffffff"><animate attributeName="cy" values="70; 30" dur="1.5s" repeatCount="indefinite"/><animate attributeName="opacity" values="1; 0" dur="1.5s" repeatCount="indefinite"/></circle><circle cx="60" cy="65" r="1.5" fill="#ffffff"><animate attributeName="cy" values="65; 25" dur="2s" repeatCount="indefinite"/><animate attributeName="opacity" values="1; 0" dur="2s" repeatCount="indefinite"/></circle></svg><h1 class="shimmer-title">Fuel Quota Dashboard</h1></div>"""
 st.markdown(header_html, unsafe_allow_html=True)
 
@@ -259,7 +259,8 @@ if current_role in ["Admin", "Manager"]:
                     if st.form_submit_button("Update Pumped Amount", use_container_width=True):
                         if not v_select or amount is None or amount <= 0: st.error("⚠️ Please select a vehicle and enter a valid amount!")
                         else:
-                            v_no = v_select.split(" ")[0]
+                            # --- FIXED: Split by " (" to correctly extract Vehicle No with spaces ---
+                            v_no = v_select.split(" (")[0]
                             idx = df[df['Vehicle_No'] == v_no].index[0]
                             if df.at[idx, 'Used_Quota'] + amount > df.at[idx, 'Weekly_Quota']: st.error("⚠️ Cannot exceed the weekly quota!")
                             else:
